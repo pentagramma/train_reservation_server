@@ -20,15 +20,9 @@ router.get('/', auth, async (req, res) => {
     // Create a properly ordered seatMap based on sequential IDs
     const seatMap = [];
     
-    // Create 11 rows, the first 10 with 7 seats, the last with 10 seats
-    for (let i = 0; i < 11; i++) {
-      if (i < 10) {
-        // First 10 rows have 7 seats each (IDs 1-70)
-        seatMap.push(seats.slice(i * 7, (i + 1) * 7));
-      } else {
-        // Last row has the remaining 10 seats (IDs 71-80)
-        seatMap.push(seats.slice(70, 80));
-      }
+    // Split into consistent batches of 7 seats
+    for (let i = 0; i < Math.ceil(seats.length / 7); i++) {
+      seatMap.push(seats.slice(i * 7, (i + 1) * 7));
     }
     
     console.log('seatMap IDs:', seatMap.map(row => row.map(seat => seat.id)));
